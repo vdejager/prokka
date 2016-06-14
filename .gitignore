@@ -21,4 +21,6 @@ db/cm/*.i1*
 db/kingdom/*/sprot.p*
 db/hmm/*.h3?
 db/genus/*.p*
-
+.project
+.pydevproject
+.gitignore
