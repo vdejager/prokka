@@ -339,7 +339,7 @@ if ($replicon) {
     $a= $replicon =~ /[^A-Za-z]/;
 
     if ((length($replicon)<3) && ($replicon =~ /[A-Za-z]/)) {
-        msg("replicon '$replicon' will be added to locus_tag as replicon ID");
+        msg("replicon '$replicon' will be added to locus_tag as replicon ID. Locus tag will look like ${locustag}_${replicon}");
     } else {
         err("replicon '$replicon' may not be longer than 2 characters and may only contain letters");
     }
