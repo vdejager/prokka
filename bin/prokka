@@ -215,7 +215,7 @@ sub check_all_tools {
 
 my(@Options, $quiet, $debug, $kingdom, $fast, $force, $outdir, $prefix, $cpus, $addgenes,
              $gcode, $gram, $gffver, $locustag, $increment, $mincontiglen, $evalue, $coverage,
-             $genus, $species, $strain, $plasmid, 
+             $genus, $species, $strain, $plasmid, $repliconnr,
              $usegenus, $proteins, $hmms, $centre, $scaffolds,
              $rfam, $norrna, $notrna, $rnammer, $rawproduct,
 	     $metagenome, $compliant, $listdb, $citation);
@@ -322,6 +322,14 @@ $evalue >= 0 or err("Invalid --evalue, must be >= 0");
 #($coverage >= 0 and $coverage <= 100) or err("Invalid --coverage, must be 0..100");
 $increment >= 1 or err("Invalid --increment, must be >= 1");
 $locustag ||= uc($EXE);
+
+#
+if (length($replicon)<3) and ($replicon ~! /[^A-Za-z]/) {
+    msg("replicon '$replicon' will be added to locus_tag");
+} else {
+    err("replicon '$replicon' may not be longer than 2 characters and may only contain letters");
+}
+    
 # http://www.ncbi.nlm.nih.gov/genomes/static/Annotation_pipeline_README.txt
 $prefix ||= $locustag.'_'.(localtime->mdy('')); # NCBI wants US format, ech.
 $outdir ||= $prefix;
@@ -1097,7 +1105,7 @@ for my $sid (@seq) {
   for my $f ( sort { $a->start <=> $b->start } @{ $seq{$sid}{FEATURE} }) {
     next unless $f->primary_tag =~ m/CDS|RNA/;
     $num_lt++;
-    my $ID = sprintf("${locustag}_%05d", $num_lt * $increment);
+    my $ID = sprintf("${locustag}_%s%05d", $replicon, $num_lt * $increment);
     $f->add_tag_value('ID', $ID);
     $f->add_tag_value('locus_tag', $ID);
     # it seems CDS features _must_ have a valid /protein_id to be output by tbl2asn into .gbk
