@@ -331,13 +331,15 @@ $evalue >= 0 or err("Invalid --evalue, must be >= 0");
 #($coverage >= 0 and $coverage <= 100) or err("Invalid --coverage, must be 0..100");
 $increment >= 1 or err("Invalid --increment, must be >= 1");
 
-$locustag ||= uc($EXE);
 # see http://www.ncbi.nlm.nih.gov/genomes/locustag/Proposal.pdf
+#
 
-if (length($replicon)<3) and ($replicon ~! /[^A-Za-z]/) {
-    msg("replicon '$replicon' will be added to locus_tag as replicon ID");
-} else {
-    err("replicon '$replicon' may not be longer than 2 characters and may only contain letters");
+if ($replicon) {
+    if ((length($replicon)<3) && ($replicon =~ /[^A-Za-z]/)) {
+        msg("replicon '$replicon' will be added to locus_tag as replicon ID");
+    } else {
+        err("replicon '$replicon' may not be longer than 2 characters and may only contain letters");
+    }
 }
     
 
